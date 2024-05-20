@@ -30,6 +30,10 @@ The project follows the MVP (Model-View-Presenter) architecture pattern, which i
   
 - **Presenter**: The Presenter serves as an intermediary between the Model and the View. It contains the presentation logic of the application and orchestrates the communication between the Model and the View. The Presenter retrieves data from the Model, formats it, and updates the View accordingly. It also listens for user input from the View and reacts appropriately by updating the Model or triggering other actions.
 
+![mvp](https://github.com/RamariaDeveloper/ImagePickerJava/assets/142702495/0b87181b-50c0-42f9-8f8f-10acf8a58d5a)
+
+
+
 ### Importance of MVP for Small Projects and Proof of Concepts
 
 Using MVP architecture, even in small projects or proof of concepts, offers several benefits:
