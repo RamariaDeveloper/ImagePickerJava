@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ImagePickerJava</string>
+    <string name="permission_allow_camera">Permissão para usar a câmera concedida</string>
+    <string name="permission_denied_camera">Permissão para usar a câmera negada</string>
 </resources>
