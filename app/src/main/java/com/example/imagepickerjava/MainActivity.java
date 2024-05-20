@@ -4,8 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> galleryActivityResultLauncher;
@@ -57,7 +62,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onActivityResult(ActivityResult result) {
                         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                             Uri imageUri = result.getData().getData();
-                            imageView.setImageURI(imageUri);
+                            Bitmap bitmap = getBitmapFromUri(imageUri);
+                            if (bitmap != null) {
+                                imageView.setImageBitmap(bitmap);
+                            }
                         }
                     }
                 });
@@ -74,12 +82,30 @@ public class MainActivity extends AppCompatActivity {
                                 imageView.setImageBitmap(imageBitmap);
                             } else {
                                 Uri imageUri = result.getData().getData();
-                                imageView.setImageURI(imageUri);
+                                Bitmap bitmap = getBitmapFromUri(imageUri);
+                                if (bitmap != null) {
+                                    imageView.setImageBitmap(bitmap);
+                                }
                             }
                         }
                     }
                 });
+    }
 
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            ParcelFileDescriptor parcelFileDescriptor =
+                    getContentResolver().openFileDescriptor(uri, "r");
+            if (parcelFileDescriptor != null) {
+                FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                Bitmap imageBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                parcelFileDescriptor.close();
+                return imageBitmap;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void setupListeners() {
